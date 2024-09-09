@@ -1,0 +1,45 @@
+@startuml 
+
+entity Employee {}
+
+entity OrganizationResponsible {}
+
+entity Organization {}
+
+entity Tender {
+  status
+}
+
+entity TenderVersion {}
+
+entity Bid {}
+
+entity BidVersion {}
+
+entity Decision {}
+
+entity Feedback {}
+
+Employee "является" -- OrganizationResponsible
+
+OrganizationResponsible "отвечает за" -- Organization
+
+Tender "создает" -- OrganizationResponsible
+
+Tender "хранит изменения" -- TenderVersion
+
+Bid "на" -- Tender
+
+Bid -- Organization
+
+Bid "хранит изменения" -- BidVersion
+
+Bid "по поводу" -- Decision 
+
+Decision "принимает" -- OrganizationResponsible
+
+OrganizationResponsible "принимает" -- Feedback
+
+Feedback "на" -- Bid
+
+@enduml
