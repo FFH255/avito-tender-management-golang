@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  tms:
+    container_name: tms
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - avito-network
+
+  postgres:
+    container_name: pg-database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_DATABASE}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/pg/data
+    networks:
+      - avito-network
+
+volumes:
+  postgres_data:
+
+networks:
+  avito-network:
